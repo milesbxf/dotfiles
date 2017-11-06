@@ -1,0 +1,10 @@
+#!/usr/bin/env zsh
+
+export NVM_DIR="/home/miles/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
+
+export JAVA_HOME=/usr/lib/jvm/java-8-oracle
+
+# tabtab source for yo package
+# uninstall by removing these lines or running `tabtab uninstall yo`
+[[ -f /home/miles/.nvm/versions/node/v5.4.0/lib/node_modules/yo/node_modules/tabtab/.completions/yo.zsh ]] && . /home/miles/.nvm/versions/node/v5.4.0/lib/node_modules/yo/node_modules/tabtab/.completions/yo.zsh

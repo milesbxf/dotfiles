@@ -1,0 +1,5 @@
+secrets/
+*.pyc
+__pycache__/
+
+aliases/crunch

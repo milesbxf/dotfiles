@@ -1,0 +1,10 @@
+#!/usr/bin/env zsh
+
+alias awstoken='OUTPUT=$(~/.virtualenvs/platform-utils/bin/get-aws-token $1); eval $OUTPUT'
+
+getPrivateIpAddress() {
+    echo "Getting private IPs for $1"
+    aws ec2 describe-instances --output text --filters 'Name=tag:Name,Values=$1' --query 'Reservations[*].Instances[*]'
+}
+
+alias ec2-private-ip=getPrivateIpAddress

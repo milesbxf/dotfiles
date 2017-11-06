@@ -1,0 +1,9 @@
+#!/usr/bin/env zsh
+
+alias le="exa --long --tree --colour-scale --header --group --time-style=long-iso --ignore-glob='*.pyc' --git"
+
+new-tmux-from-dir-name() {
+    tmux new-session -As $(basename ${PWD})
+}
+
+alias tnew="new-tmux-from-dir-name"

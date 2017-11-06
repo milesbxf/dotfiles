@@ -1,0 +1,33 @@
+[user]
+	name = Miles Bryant
+	email = miles.bryant@crunch.co.uk
+[core]
+	editor = vim
+	autocrlf = input
+	excludesfile = /home/miles/.gitignore-global
+[commit]
+	template = ~/.gitmessage
+[push]
+	default = current
+[alias]
+	st = status
+	cma = commit -a -m
+	unstage = reset HEAD --
+	plg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+[pull]
+	rebase = true
+
+[url "https://github.com/"]
+    insteadOf = gh:
+
+[url "https://gist.github.com/"]
+    insteadOf = gist:
+
+[url "https://bitbucket.org/"]
+    insteadOf = bb:
+
+[url "git@bitbucket.org:crunch-ondemand/"]
+    insteadOf = cr:
+
+[merge]
+	tool = kdiff3
