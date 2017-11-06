@@ -21,6 +21,7 @@ POWERLEVEL9K_SHOW_CHANGESET=true
 
 
 source ~/.dotfiles/aliases/*
+source ~/.dotfiles/aliases/other # doesnt get picked up for some reason
 
 # export LANG=en_US.UTF-8
 

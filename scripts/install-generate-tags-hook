@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+set -e -o pipefail
+
+GIT_DIR=$(git rev-parse --git-dir)
+
+echo "generate-tags" >> ${GIT_DIR}/hooks/post-commit
+
+chmod +x ${GIT_DIR}/hooks/post-commit

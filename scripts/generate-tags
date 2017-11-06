@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+set -e -o pipefail
+
+ROOT_DIR=$(git rev-parse --show-toplevel)
+ctags \
+    -R \
+    --exclude=__pycache__ \
+    --exclude=.git \
+    --exclude=.mypy_cache \
+    --exclude=node_modules \
+    --exclude=htmlcov \
+    --tag-relative=never \
+    -f ${ROOT_DIR}/.git/tags \
+    ${ROOT_DIR}
+echo -e "\e[36mSaved tags to ${ROOT_DIR}/.git/tags\e[0m"
