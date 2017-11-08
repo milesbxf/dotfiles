@@ -20,8 +20,9 @@ POWERLEVEL9K_DIR_DEFAULT_FOREGROUND="white"
 POWERLEVEL9K_SHOW_CHANGESET=true
 
 
-source ~/.dotfiles/aliases/*
-source ~/.dotfiles/aliases/other # doesnt get picked up for some reason
+for f in $(ls ~/.dotfiles/aliases/*); do
+    source $f
+done
 
 # export LANG=en_US.UTF-8
 
