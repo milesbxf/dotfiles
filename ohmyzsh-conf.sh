@@ -49,5 +49,5 @@ DISABLE_UNTRACKED_FILES_DIRTY="true"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(aws autojump common-aliases git gitfast git-extras git-flow mvn pip python vault vi-mode virtualenvwrapper zsh-syntax-highlighting alias-tips docker-aliases)
+plugins=(aws autojump common-aliases git gitfast git-extras git-flow kubectl mvn pip python vault vi-mode virtualenvwrapper zsh-syntax-highlighting alias-tips docker-aliases)
 
