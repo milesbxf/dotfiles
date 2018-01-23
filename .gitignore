@@ -3,3 +3,4 @@ secrets/
 __pycache__/
 
 aliases/crunch
+nvim/.netrwhist

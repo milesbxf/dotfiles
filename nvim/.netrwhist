@@ -1,6 +1,0 @@
-let g:netrw_dirhistmax  =10
-let g:netrw_dirhist_cnt =4
-let g:netrw_dirhist_1='/home/miles/dev/infra/jenkins/ansible/base-roles/docker-ubuntu'
-let g:netrw_dirhist_2='/home/miles/dev/workspace/platform-utils/crunch/deployment/check_k8s_health'
-let g:netrw_dirhist_3='/home/miles/dev/platform/k8s-blueprints/infra'
-let g:netrw_dirhist_4='/home/miles/dev/platform/k8s-blueprints/infra/api-gateway'
