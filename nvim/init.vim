@@ -40,6 +40,16 @@ xmap ga <Plug>(EasyAlign)
 nmap ga <Plug>(EasyAlign)
 
 
+"========= Snippets =========
+
+" Use <TAB> for all insert completion
+Plug 'ervandew/supertab'
+
+Plug 'SirVer/ultisnips'
+Plug 'honza/vim-snippets'
+Plug 'cwood/ultisnips-terraform-snippets'
+
+
 "========= File utilities (linting, autocompletion) =========
 
 "Autocompletion
@@ -62,13 +72,6 @@ Plug 'junegunn/fzf.vim'
 Plug 'morhetz/gruvbox'
 "Solarized colour scheme
 Plug 'romainl/flattened'
-
-
-"========= Snippets =========
-
-Plug 'SirVer/ultisnips'
-Plug 'honza/vim-snippets'
-Plug 'cwood/ultisnips-terraform-snippets'
 
 
 "========= Languages =========
@@ -272,9 +275,15 @@ let &colorcolumn=join(range(80,999),",") "visual margin for line width
 
 
 " =============================== Snippets ===============================
-let g:UltiSnipsExpandTrigger="<tab>"
-let g:UltiSnipsJumpForwardTrigger="<C-l>"
-let g:UltiSnipsJumpBackwardTrigger="<C-h>"
+
+
+let g:ycm_key_list_select_completion = ['<C-n>', '<Down>']
+let g:ycm_key_list_previous_completion = ['<C-p>', '<Up>']
+let g:SuperTabDefaultCompletionType = '<C-n>'
+
+let g:UltiSnipsExpandTrigger="<c-j>"
+let g:UltiSnipsJumpForwardTrigger="<c-j>"
+let g:UltiSnipsJumpBackwardTrigger="<c-k>"
 
 " =============================== Python files ===============================
 
