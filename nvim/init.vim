@@ -65,6 +65,9 @@ Plug 'sbdchd/neoformat'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 
+"Better diffing
+Plug 'chrisbra/vim-diff-enhanced'
+
 
 "========= Colour schemes =========
 
@@ -180,6 +183,7 @@ noremap <leader>] :TagbarToggle<cr>
 
 "run Go tests
 noremap <F10> :wall<cr>:GoTest<cr>
+noremap <F9> :wall<cr>:GoBuild<cr>
 
 "remove search highlighting
 nnoremap <leader><space> :noh<cr>
