@@ -64,3 +64,16 @@ if [[ -n $SSH_CONNECTION ]]; then
 else
    export EDITOR='nvim'
 fi
+
+
+# FZF tmux
+# usage: fzf-tmux [-u|-d [HEIGHT[%]]] [-l|-r [WIDTH[%]]] [--] [FZF OPTIONS]
+#        (-[udlr]: up/down/left/right)
+
+# select git branches in horizontal split below (15 lines)
+git branch | fzf-tmux -d 15
+
+# select multiple words in vertical split on the left (20% of screen width)
+cat /usr/share/dict/words | fzf-tmux -l 20% --multi --reverse
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
