@@ -15,6 +15,19 @@ done
 
 export EDITOR='nvim'
 
+source ~/.zprezto/runcoms/zshrc
+
+fpath=($fpath ~/.dotfiles/fpath)
+
+autoload -Uz promptinit
+promptinit
+prompt mpurer
+
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
-source ~/.zprezto/runcoms/zshrc
+source ~/.dotfiles/zsh/key-bindings.zsh
+
+# For gnome terminal/tmux setup; for some reason it doesn't recognise HOME/END
+# escape sequences properly
+bindkey "^[[1~" beginning-of-line
+bindkey "^[[4~" end-of-line

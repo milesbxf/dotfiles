@@ -7,3 +7,5 @@ new-tmux-from-dir-name() {
 }
 
 alias tnew="new-tmux-from-dir-name"
+
+alias md="mkdir -p"

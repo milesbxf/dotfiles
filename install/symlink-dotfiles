@@ -2,7 +2,7 @@
 
 set -exo pipefail
 
-for f in .tmux.conf .zshrc .gitconfig; do
+for f in .tmux.conf .zshrc .gitconfig .zprofile .zpreztorc; do
     if [[ ! -L ~/${f} ]]; then
         ln -fs ~/.dotfiles/${f} ~/${f}
     fi
