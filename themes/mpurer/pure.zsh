@@ -24,6 +24,33 @@
 # \e[2K => clear everything on the current line
 
 
+# Shamelessly lifted from agnoster/agnoster-zsh-theme
+
+prompt_segment() {
+  local bg fg
+  [[ -n $1 ]] && bg="%K{$1}" || bg="%k"
+  [[ -n $2 ]] && fg="%F{$2}" || fg="%f"
+  if [[ $CURRENT_BG != 'NONE' && $1 != $CURRENT_BG ]]; then
+      print -n "%K{$CURRENT_BG}\u2004%{$bg%F{$CURRENT_BG}%}${SEGMENT_SEPARATOR}%{$fg%}\u2004"
+  else
+    print -n "%{$bg%}%{$fg%}"
+  fi
+  [[ -n $3 ]] && print -n $3
+}
+
+# End the prompt, closing any open segments
+prompt_end() {
+  if [[ -n $CURRENT_BG ]]; then
+    print -n "%{%k%F{$CURRENT_BG}%}$SEGMENT_SEPARATOR"
+  else
+    print -n "%{%k%}"
+  fi
+  print -n "%{%f%}"
+  CURRENT_BG=''
+}
+
+
+
 # turns seconds into human readable time
 # 165392 => 1d 21h 56m 32s
 # https://github.com/sindresorhus/pretty-time-zsh
@@ -119,24 +146,42 @@ prompt_pure_preprompt_render() {
 
 	# Initialize the preprompt array.
 	local -a preprompt_parts
+    PROMPT_PATH_FG=${PROMPT_PATH_FG:-214}
+    PROMPT_PATH_BG=${PROMPT_PATH_BG:-241}
 
+    CURRENT_BG='NONE'
 	# Set the path.
-	preprompt_parts+=('%F{blue}%~%f')
+    preprompt_parts+=($(prompt_segment ${PROMPT_PATH_BG} ${PROMPT_PATH_FG})' %~')
+    CURRENT_BG=${PROMPT_PATH_BG}
 
+    PROMPT_GIT_BG=${PROMPT_GIT_BG:-red}
+    PROMPT_GIT_FG=${PROMPT_GIT_FG:-yellow}
 	# Add git branch and dirty status info.
 	typeset -gA prompt_pure_vcs_info
 	if [[ -n $prompt_pure_vcs_info[branch] ]]; then
-		preprompt_parts+=("%F{$git_color}"'${prompt_pure_vcs_info[branch]}${prompt_pure_git_dirty}%f')
+        preprompt_parts+=($(prompt_segment ${PROMPT_GIT_BG} ${PROMPT_GIT_FG})'${prompt_pure_vcs_info[branch]}${prompt_pure_git_dirty}')
+        CURRENT_BG=${PROMPT_GIT_BG}
 	fi
 	# Git pull/push arrows.
 	if [[ -n $prompt_pure_git_arrows ]]; then
 		preprompt_parts+=('%F{cyan}${prompt_pure_git_arrows}%f')
 	fi
 
+    PROMPT_USERMACHINE_BG=${PROMPT_USERMACHINE_BG:-blue}
+    PROMPT_USERMACHINE_FG=${PROMPT_USERMACHINE_FG:-green}
 	# Username and machine, if applicable.
-	[[ -n $prompt_pure_state[username] ]] && preprompt_parts+=('${prompt_pure_state[username]}')
+    if [[ -n $prompt_pure_state[username] ]]; then
+        preprompt_parts+=($(prompt_segment ${PROMPT_USERMACHINE_BG} ${PROMPT_USERMACHINE_FG})'${prompt_pure_state[username]}')
+        CURRENT_BG=${PROMPT_USERMACHINE_BG}
+    fi
+
+    PROMPT_EXTIME_BG=${PROMPT_EXTIME_BG:-yellow}
+    PROMPT_EXTIME_FG=${PROMPT_EXTIME_FG:-red}
 	# Execution time.
-	[[ -n $prompt_pure_cmd_exec_time ]] && preprompt_parts+=('%F{yellow}${prompt_pure_cmd_exec_time}%f')
+	if [[ -n $prompt_pure_cmd_exec_time ]]; then
+        preprompt_parts+=($(prompt_segment ${PROMPT_EXTIME_BG} ${PROMPT_EXTIME_FG})'%F{yellow}${prompt_pure_cmd_exec_time}%f')
+        CURRENT_BG=${PROMPT_EXTIME_BG}
+    fi
 
 	local cleaned_ps1=$PROMPT
 	local -H MATCH MBEGIN MEND
@@ -150,7 +195,8 @@ prompt_pure_preprompt_render() {
 	# Construct the new prompt with a clean preprompt.
 	local -ah ps1
 	ps1=(
-		${(j. .)preprompt_parts}  # Join parts, space separated.
+		${(j..)preprompt_parts}  # Join parts
+        $(prompt_end)
 		$prompt_newline           # Separate preprompt and prompt.
 		$cleaned_ps1
 	)
@@ -443,9 +489,9 @@ prompt_pure_async_callback() {
 	[[ ${prompt_pure_async_render_requested:-$do_render} = 1 ]] && prompt_pure_preprompt_render
 	unset prompt_pure_async_render_requested
 }
-
 prompt_pure_setup() {
 	setopt localoptions noshwordsplit
+
 
 	# Prevent percentage showing up if output doesn't end with a newline.
 	export PROMPT_EOL_MARK=''
@@ -499,9 +545,10 @@ prompt_pure_setup() {
 
 	# if a virtualenv is activated, display it in grey
 	PROMPT='%(12V.%F{242}%12v%f .)'
-
-	# prompt turns red if the previous command didn't exit with 0
-	PROMPT+='%(?..%F{red}  ${i_fa_exclamation_circle} ${?} %F{reset})${editor_info[keymap]}%f '
+    # Show red exclamation mark & exit code if last command failed
+	PROMPT+='%(?..%F{red}%B  ${i_fa_exclamation_circle} ${?}%b %F{reset})'
+    # Show editor info segment
+    PROMPT+='${editor_info[keymap]}%f '
 }
 
 prompt_pure_setup "$@"
