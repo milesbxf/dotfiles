@@ -168,8 +168,48 @@ noremap <leader>b :Buffers<cr>
 noremap <leader>s :Find<cr>
 "search filenames with FZF
 noremap <leader>f :Files<cr>
+
+"Search Git files (git ls-files && git status)
+noremap <leader>ga :GFiles<cr>
+noremap <leader>gs :GFiles?<cr>
+
+"Search lines in current buffer & in all buffers
+noremap <leader>l :BLines<cr>
+noremap <leader>k :Lines<cr>
+
+"Search tags in current buffer & in all buffers
+noremap <leader>5 :BTags<cr>
+noremap <leader>6 :Tags<cr>
+
+"Search marks
+noremap <leader>m :Marks<cr>
+
+"Search file history
+noremap <leader>hf :History<cr>
+"Search command history
+noremap <leader>hc :History:<cr>
+"Search search history
+noremap <leader>hs :History/<cr>
+
+"Search windows
+noremap <leader>i :Windows<cr>
+
+"Search snippets
+noremap <leader>n :Snippets<cr>
+
+"Search nvim commands
+noremap <leader>; :Commands<cr>
+
+"Search commits
+noremap <leader>ca :Commits<cr>
+noremap <leader>cb :BCommits<cr>
+
+" Yank & put from clipboard register
+noremap <leader>y "+y
+noremap <leader>p "+p
+
 "generate tags for tagtree
-noremap <leader>g :! generate-tags<cr>
+noremap <leader>gt :! generate-tags<cr>
 "Splits, vertical & horizontal
 noremap <leader>= :vsp<cr><C-W>l<cr>
 noremap <leader>- :sp<cr><C-W>j<cr>
