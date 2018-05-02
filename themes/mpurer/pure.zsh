@@ -139,7 +139,7 @@ prompt_pure_string_length_to_var() {
 git_bg_color() {
     PROMPT_GIT_BG_DIRTY=${PROMPT_GIT_BG:-130}
     PROMPT_GIT_BG_CLEAN=${PROMPT_GIT_BG:-106}
-    if [[ "${prompt_pure_git_dirty}" == "true" ]]; then
+    if [[ ! -z "${prompt_pure_git_dirty}" ]]; then
         echo $PROMPT_GIT_BG_DIRTY
     else
         echo $PROMPT_GIT_BG_CLEAN
@@ -149,7 +149,7 @@ git_bg_color() {
 git_fg_color() {
     PROMPT_GIT_FG_DIRTY=${PROMPT_GIT_FG:-236}
     PROMPT_GIT_FG_CLEAN=${PROMPT_GIT_FG:-237}
-    if [[ "${prompt_pure_git_dirty}" == "true" ]]; then
+    if [[ ! -z "${prompt_pure_git_dirty}" ]]; then
         echo $PROMPT_GIT_FG_DIRTY
     else
         echo $PROMPT_GIT_FG_CLEAN
@@ -166,31 +166,13 @@ prompt_pure_preprompt_render() {
 
 	# Initialize the preprompt array.
 	local -a preprompt_parts
-    PROMPT_PATH_FG=${PROMPT_PATH_FG:-214}
-    PROMPT_PATH_BG=${PROMPT_PATH_BG:-241}
 
     CURRENT_BG='NONE'
-	# Set the path.
-    preprompt_parts+=($(prompt_segment ${PROMPT_PATH_BG} ${PROMPT_PATH_FG})' %~')
-    CURRENT_BG=${PROMPT_PATH_BG}
-
-	# Add git branch and dirty status info.
-	typeset -gA prompt_pure_vcs_info
-	if [[ -n $prompt_pure_vcs_info[branch] ]]; then
-        branch='${i_dev_git_branch} ${prompt_pure_vcs_info[branch]}'
-        preprompt_parts+=($(prompt_segment '$(git_bg_color)' '$(git_fg_color)')${branch})
-        CURRENT_BG='$(git_bg_color)'
-	fi
-	# Git pull/push arrows.
-	if [[ -n $prompt_pure_git_arrows ]]; then
-		preprompt_parts+=(' ${prompt_pure_git_arrows}')
-	fi
-
-    PROMPT_USERMACHINE_BG=${PROMPT_USERMACHINE_BG:-blue}
-    PROMPT_USERMACHINE_FG=${PROMPT_USERMACHINE_FG:-green}
+    PROMPT_USERMACHINE_BG=${PROMPT_USERMACHINE_BG:-66}
+    PROMPT_USERMACHINE_FG=${PROMPT_USERMACHINE_FG:-237}
 	# Username and machine, if applicable.
     if [[ -n $prompt_pure_state[username] ]]; then
-        preprompt_parts+=($(prompt_segment ${PROMPT_USERMACHINE_BG} ${PROMPT_USERMACHINE_FG})'${prompt_pure_state[username]}')
+        preprompt_parts+=($(prompt_segment ${PROMPT_USERMACHINE_BG} ${PROMPT_USERMACHINE_FG})' ${prompt_pure_state[username]}%f')
         CURRENT_BG=${PROMPT_USERMACHINE_BG}
     fi
 
@@ -201,6 +183,26 @@ prompt_pure_preprompt_render() {
         preprompt_parts+=($(prompt_segment ${PROMPT_EXTIME_BG} ${PROMPT_EXTIME_FG})'%F{yellow}${prompt_pure_cmd_exec_time}%f')
         CURRENT_BG=${PROMPT_EXTIME_BG}
     fi
+
+    PROMPT_PATH_FG=${PROMPT_PATH_FG:-214}
+    PROMPT_PATH_BG=${PROMPT_PATH_BG:-237}
+
+	# Set the path.
+    preprompt_parts+=($(prompt_segment ${PROMPT_PATH_BG} ${PROMPT_PATH_FG})' %~')
+    CURRENT_BG=${PROMPT_PATH_BG}
+
+	# Add git branch and dirty status info.
+	typeset -gA prompt_pure_vcs_info
+	if [[ -n $prompt_pure_vcs_info[branch] ]]; then
+        branch='${i_dev_git_branch} ${prompt_pure_vcs_info[branch]}'
+        preprompt_parts+=($(prompt_segment '$(git_bg_color)' '$(git_fg_color)')${branch}' ${prompt_pure_git_dirty} ')
+        CURRENT_BG='$(git_bg_color)'
+	fi
+	# Git pull/push arrows.
+	if [[ -n $prompt_pure_git_arrows ]]; then
+		preprompt_parts+=('${prompt_pure_git_arrows} ')
+	fi
+
 
 	local cleaned_ps1=$PROMPT
 	local -H MATCH MBEGIN MEND
@@ -468,7 +470,7 @@ prompt_pure_async_callback() {
 			if (( code == 0 )); then
 				unset prompt_pure_git_dirty
 			else
-				typeset -g prompt_pure_git_dirty="true"
+				typeset -g prompt_pure_git_dirty="${i_fa_asterisk}"
 			fi
 
 			[[ $prev_dirty != $prompt_pure_git_dirty ]] && do_render=1
@@ -548,10 +550,10 @@ prompt_pure_setup() {
 	fi
 
 	# show username@host if logged in through SSH
-	[[ -n $ssh_connection ]] && username='%F{242}%n@%m%f'
+	[[ -n $ssh_connection ]] && username='%n@%m'
 
 	# show username@host if root, with username in white
-	[[ $UID -eq 0 ]] && username='%F{white}%n%f%F{242}@%m%f'
+	[[ $UID -eq 0 ]] && username='%n@%m'
 
 	typeset -gA prompt_pure_state=(
 		username "$username"
