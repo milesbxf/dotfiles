@@ -34,3 +34,7 @@ bindkey "^[[4~" end-of-line
 
 # load virtualenvwrapper
 source /usr/local/bin/virtualenvwrapper.sh
+
+if [ $commands[kubectl] ]; then
+  source <(kubectl completion zsh)
+fi
