@@ -11,8 +11,7 @@
 
 export KEYTIMEOUT=1
 
-# export SEGMENT_SEPARATOR="${i_ple_honeycomb}"
-export SEGMENT_SEPARATOR="\ue0b0"
+export SEGMENT_SEPARATOR="${i_ple_pixelated_squares_big}"
 
 # Set case-sensitivity for completion, history lookup, etc.
 # zstyle ':prezto:*:*' case-sensitive 'yes'

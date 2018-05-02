@@ -136,13 +136,33 @@ prompt_pure_string_length_to_var() {
 	typeset -g "${var}"="${length}"
 }
 
+git_bg_color() {
+    PROMPT_GIT_BG_DIRTY=${PROMPT_GIT_BG:-130}
+    PROMPT_GIT_BG_CLEAN=${PROMPT_GIT_BG:-106}
+    if [[ "${prompt_pure_git_dirty}" == "true" ]]; then
+        echo $PROMPT_GIT_BG_DIRTY
+    else
+        echo $PROMPT_GIT_BG_CLEAN
+    fi
+}
+
+git_fg_color() {
+    PROMPT_GIT_FG_DIRTY=${PROMPT_GIT_FG:-236}
+    PROMPT_GIT_FG_CLEAN=${PROMPT_GIT_FG:-237}
+    if [[ "${prompt_pure_git_dirty}" == "true" ]]; then
+        echo $PROMPT_GIT_FG_DIRTY
+    else
+        echo $PROMPT_GIT_FG_CLEAN
+    fi
+}
+
 prompt_pure_preprompt_render() {
 	setopt localoptions noshwordsplit
 
 	# Set color for git branch/dirty status, change color if dirty checking has
 	# been delayed.
 	local git_color=242
-	[[ -n ${prompt_pure_git_last_dirty_check_timestamp+x} ]] && git_color=red
+	# [[ -n ${prompt_pure_git_last_dirty_check_timestamp+x} ]] && git_color=red
 
 	# Initialize the preprompt array.
 	local -a preprompt_parts
@@ -154,17 +174,16 @@ prompt_pure_preprompt_render() {
     preprompt_parts+=($(prompt_segment ${PROMPT_PATH_BG} ${PROMPT_PATH_FG})' %~')
     CURRENT_BG=${PROMPT_PATH_BG}
 
-    PROMPT_GIT_BG=${PROMPT_GIT_BG:-red}
-    PROMPT_GIT_FG=${PROMPT_GIT_FG:-yellow}
 	# Add git branch and dirty status info.
 	typeset -gA prompt_pure_vcs_info
 	if [[ -n $prompt_pure_vcs_info[branch] ]]; then
-        preprompt_parts+=($(prompt_segment ${PROMPT_GIT_BG} ${PROMPT_GIT_FG})'${prompt_pure_vcs_info[branch]}${prompt_pure_git_dirty}')
-        CURRENT_BG=${PROMPT_GIT_BG}
+        branch='${i_dev_git_branch} ${prompt_pure_vcs_info[branch]}'
+        preprompt_parts+=($(prompt_segment '$(git_bg_color)' '$(git_fg_color)')${branch})
+        CURRENT_BG='$(git_bg_color)'
 	fi
 	# Git pull/push arrows.
 	if [[ -n $prompt_pure_git_arrows ]]; then
-		preprompt_parts+=('%F{cyan}${prompt_pure_git_arrows}%f')
+		preprompt_parts+=(' ${prompt_pure_git_arrows}')
 	fi
 
     PROMPT_USERMACHINE_BG=${PROMPT_USERMACHINE_BG:-blue}
@@ -395,8 +414,8 @@ prompt_pure_check_git_arrows() {
 	setopt localoptions noshwordsplit
 	local arrows left=${1:-0} right=${2:-0}
 
-	(( right > 0 )) && arrows+=${PURE_GIT_DOWN_ARROW:-⇣}
-	(( left > 0 )) && arrows+=${PURE_GIT_UP_ARROW:-⇡}
+	(( right > 0 )) && arrows+=${PURE_GIT_DOWN_ARROW:-${i_oct_cloud_download}}
+	(( left > 0 )) && arrows+=${PURE_GIT_UP_ARROW:-${i_oct_cloud_upload}}
 
 	[[ -n $arrows ]] || return
 	typeset -g REPLY=$arrows
@@ -449,7 +468,7 @@ prompt_pure_async_callback() {
 			if (( code == 0 )); then
 				unset prompt_pure_git_dirty
 			else
-				typeset -g prompt_pure_git_dirty="*"
+				typeset -g prompt_pure_git_dirty="true"
 			fi
 
 			[[ $prev_dirty != $prompt_pure_git_dirty ]] && do_render=1
