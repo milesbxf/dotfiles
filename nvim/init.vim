@@ -216,6 +216,8 @@ noremap <leader>- :sp<cr><C-W>j<cr>
 "write & quit
 noremap <leader>w :w<cr>
 noremap <leader>q :q<cr>
+noremap <leader>x :x<cr>
+noremap <leader>z :xall<cr>
 
 "open undotree/tagbar
 noremap <leader>u :UndotreeToggle<cr>
