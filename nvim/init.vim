@@ -18,6 +18,8 @@ Plug 'mbbill/undotree'
 "Allows switching between vim and other tmux panes
 Plug 'christoomey/vim-tmux-navigator'
 
+"Shows indent guides
+Plug 'Yggdroot/indentLine'
 
 "========= Editing/motions =========
 
@@ -256,6 +258,10 @@ if has('mouse')
   set mouse=a
 endif
 
+"========================== UI: indent guides =============================
+let g:indentLine_setColors = 0
+let g:indentLine_color_term = 167
+let g:indentLine_char = ''
 
 "====================== UI: Line numbers/highlighting =========================
 " Set "hybrid" line number mode - display the current line number, but relative
