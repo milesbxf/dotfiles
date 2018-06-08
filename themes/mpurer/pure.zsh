@@ -517,7 +517,7 @@ prompt_pure_setup() {
 	# Prevent percentage showing up if output doesn't end with a newline.
 	export PROMPT_EOL_MARK=''
 
-	prompt_opts=(subst percent)
+	prompt_opts=(subst sp percent)
 
 	# borrowed from promptinit, sets the prompt options in case pure was not
 	# initialized via promptinit.
@@ -559,9 +559,6 @@ prompt_pure_setup() {
 		username "$username"
 	)
 
-    zstyle ':prezto:module:editor:info:keymap:primary' format "%F{167}${i_fa_chevron_right}%F{108}${i_fa_chevron_right}%F{208}${i_fa_chevron_right}"
-    zstyle ':prezto:module:editor:info:keymap:alternate' format "%F{142}${i_fa_chevron_left}%F{214}${i_fa_chevron_left}%F{109}${i_fa_chevron_left}"
-
     PROMPT_SYMBOLS=""
 
 	# if a virtualenv is activated, display it in grey
@@ -569,7 +566,8 @@ prompt_pure_setup() {
     # Show red exclamation mark & exit code if last command failed
 	PROMPT+='%(?..%F{red}%B  ${i_fa_exclamation_circle} ${?}%b %F{reset})'
     # Show editor info segment
-    PROMPT+='${editor_info[keymap]}%f '
+    # PROMPT+='${editor_info[keymap]}%f '
+    PROMPT+='%F{167}${i_fa_chevron_right}%F{108}${i_fa_chevron_right}%F{208}${i_fa_chevron_right}%f '
 }
 
 prompt_pure_setup "$@"
