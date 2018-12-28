@@ -558,7 +558,6 @@ prompt_pure_setup() {
 	typeset -gA prompt_pure_state=(
 		username "$username"
 	)
-
     PROMPT_SYMBOLS=""
 
 	# if a virtualenv is activated, display it in grey
@@ -566,8 +565,7 @@ prompt_pure_setup() {
     # Show red exclamation mark & exit code if last command failed
 	PROMPT+='%(?..%F{red}%B  ${i_fa_exclamation_circle} ${?}%b %F{reset})'
     # Show editor info segment
-    # PROMPT+='${editor_info[keymap]}%f '
-    PROMPT+='%F{167}${i_fa_chevron_right}%F{108}${i_fa_chevron_right}%F{208}${i_fa_chevron_right}%f '
+    PROMPT+='${editor_info[keymap]}%f '
 }
 
 prompt_pure_setup "$@"
