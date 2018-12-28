@@ -1,12 +1,14 @@
 [user]
 	name = Miles Bryant
-	email = miles.bryant@crunch.co.uk
+	email = milesbryant@monzo.com
+	signingkey = 43A8B34FE3CD9642
 [core]
-	editor = vim
+	editor = nvim
 	autocrlf = input
 	excludesfile = /home/miles/.gitignore-global
 [commit]
 	template = ~/.gitmessage
+	gpgsign = true
 [push]
 	default = current
 [alias]
@@ -26,8 +28,17 @@
 [url "https://bitbucket.org/"]
     insteadOf = bb:
 
-[url "git@bitbucket.org:crunch-ondemand/"]
-    insteadOf = cr:
+[url "git@github.com:monzo/"]
+    insteadOf = mz:
 
 [merge]
 	tool = kdiff3
+[url "ssh://git@github.com/"]
+	insteadOf = https://github.com/
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+[gpg]
+	program = gpg2
