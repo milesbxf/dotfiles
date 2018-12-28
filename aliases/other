@@ -1,11 +1,21 @@
 #!/usr/bin/env zsh
 
+# A colourful, pretty version of ls/tree
+# https://the.exa.website/
 alias le="exa --long --tree --colour-scale --header --group --time-style=long-iso --ignore-glob='*.pyc' --git"
 
-new-tmux-from-dir-name() {
-    tmux new-session -As $(basename ${PWD})
+alias md="mkdir -p"
+
+# Laziness yo
+alias v="nvim"
+alias vi="nvim"
+
+github_clone() {
+    [[ -z $1 ]] && echo "Error: ghc requires one argument, e.g. foo/bar" && exit 1
+    echo "mkdir -p $(dirname ~/src/github.com/$1)"
+    mkdir -p $(dirname ~/src/github.com/$1)
+    git clone git@github.com:$1 ~/src/github.com/$1
+    cd ~/src/github.com/$1
 }
 
-alias tnew="new-tmux-from-dir-name"
-
-alias md="mkdir -p"
+alias ghc=github_clone
