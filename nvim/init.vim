@@ -21,6 +21,15 @@ Plug 'christoomey/vim-tmux-navigator'
 "Shows indent guides
 Plug 'Yggdroot/indentLine'
 
+"Tree explorer
+Plug 'scrooloose/nerdtree'
+
+"Pretty ()
+Plug 'junegunn/rainbow_parentheses.vim'
+
+" Highlight yank
+Plug 'machakann/vim-highlightedyank'
+
 "========= Editing/motions =========
 
 "Automatically closes HTML/XML tags
@@ -84,7 +93,7 @@ Plug 'romainl/flattened'
 Plug 'avakhov/vim-yaml'
 Plug 'hashivim/vim-terraform'
 Plug 'andrewstuart/vim-kubernetes'
-Plug 'fatih/vim-go'
+Plug 'fatih/vim-go', { 'tag': 'v1.17' }
 
 "Makes vim indentation PEP8 compatible
 Plug 'Vimjas/vim-python-pep8-indent'
@@ -96,7 +105,7 @@ Plug 'Vimjas/vim-python-pep8-indent'
 Plug 'tpope/vim-fugitive'
 
 "Displays git symbols in the gutter, e.g. +,-,~
-Plug 'airblade/vim-gitgutter'
+Plug 'mhinz/vim-signify'
 
 
 call plug#end()
@@ -116,11 +125,27 @@ let g:airline_theme          = 'gruvbox'
 colorscheme gruvbox
 set background=dark
 
+" Git gutter symbols
+let g:signify_vcs_list=['git']
+let g:signify_realtime = 1
+highlight link SignifySignAdd             DiffAdd
+highlight link SignifySignChange          DiffChange
+highlight link SignifySignDelete          DiffDelete
+highlight link SignifySignChangeDelete    SignifySignChange
+highlight link SignifySignDeleteFirstLine SignifySignDelete
+
+set inccommand=split
 
 "========================== ALE settings ============================
-let g:ale_sign_error                 = '⤫'
-let g:ale_sign_warning               = '⚠'
+let g:ale_sign_error                 = '❌'
+let g:ale_sign_warning               = '⚠️'
+let g:ale_sign_info = 'ℹ️'
 let g:airline#extensions#ale#enabled = 1
+let g:ale_lint_delay = 100
+let g:ale_set_highlights = 1
+let g:ale_sign_column_always = 1
+highlight link ALEErrorLine Error
+
 
 
 "========================== Buffers & Files ============================
@@ -193,6 +218,8 @@ noremap <leader>hc :History:<cr>
 "Search search history
 noremap <leader>hs :History/<cr>
 
+noremap <leader>1 :SignifyToggleHighlight<cr>
+
 "Search windows
 noremap <leader>i :Windows<cr>
 
@@ -224,6 +251,7 @@ noremap <leader>z :xall<cr>
 "open undotree/tagbar
 noremap <leader>u :UndotreeToggle<cr>
 noremap <leader>] :TagbarToggle<cr>
+noremap <leader>t :NERDTreeToggle<cr>
 
 "run Go tests
 noremap <F10> :wall<cr>:GoTest<cr>
