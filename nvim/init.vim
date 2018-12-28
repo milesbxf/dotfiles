@@ -114,6 +114,8 @@ call plug#end()
 
 set termguicolors  " Ensure we're running in 256 true colour mode
 
+set updatetime=50 " Update async processes quicker
+
 " Gruvbox theme config; see https://github.com/morhetz/gruvbox/wiki/Configuration
 let g:gruvbox_italic         = 1
 let g:gruvbox_bold           = 1
@@ -253,9 +255,18 @@ noremap <leader>u :UndotreeToggle<cr>
 noremap <leader>] :TagbarToggle<cr>
 noremap <leader>t :NERDTreeToggle<cr>
 
-"run Go tests
-noremap <F10> :wall<cr>:GoTest<cr>
-noremap <F9> :wall<cr>:GoBuild<cr>
+"Go commands
+
+noremap gt :GoTest<cr>
+noremap gg :GoInfo<cr>
+noremap gft :GoTestFunction<cr>
+
+noremap gb :<C-u>call <SID>build_go_files()<cr>
+noremap <leader>g :GoDeclsDir<cr>
+
+nnoremap <C-.> :cnext<cr>
+nnoremap <C-,> :cprevious<cr>
+nnoremap <C-/> :cclose<cr>
 
 "remove search highlighting
 nnoremap <leader><space> :noh<cr>
@@ -393,4 +404,37 @@ autocmd FileType terraform setlocal commentstring=#%s
 
 " =============================== Golang files ===============================
 
+" can I has all the syntax highlights plz
+let g:go_highlight_types = 1
+let g:go_highlight_fields = 1
+let g:go_highlight_functions = 1
+let g:go_highlight_function_calls = 1
+let g:go_highlight_operators = 1
+let g:go_highlight_extra_types = 1
+let g:go_highlight_build_constraints = 1
+let g:go_highlight_generate_tags = 1
+
 let g:go_fmt_command = "goimports"
+
+let g:go_auto_type_info = 1
+let g:go_auto_sameids = 1
+
+" update info a bit quicker (vim gets pretty sluggish for values lower than
+" this)
+let g:go_updatetime = 500
+
+"write file when calling go build
+set autowrite
+
+" open everything in quickfix window
+let g:go_list_type = "quickfix"
+
+" run :GoBuild or :GoTestCompile based on the go file
+function! s:build_go_files()
+  let l:file = expand('%')
+  if l:file =~# '^\f\+_test\.go$'
+    call go#test#Test(0, 1)
+  elseif l:file =~# '^\f\+\.go$'
+    call go#cmd#Build(0)
+  endif
+endfunction
