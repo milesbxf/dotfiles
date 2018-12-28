@@ -1,17 +1,24 @@
 #
 # Sets Prezto options.
 #
-# Authors:
-#   Sorin Ionescu <sorin.ionescu@gmail.com>
-#
-
-#
 # General
 #
 
 export KEYTIMEOUT=1
 
+# https://github.com/ryanoasis/nerd-fonts
 export SEGMENT_SEPARATOR="${i_ple_pixelated_squares_big}"
+
+
+# Save all the history.
+export HISTFILE=~/.zhistory
+export HISTSIZE=999999999
+export SAVEHIST=999999999
+export EXTENDED_HISTORY=true
+export INC_APPEND_HISTORY=true
+export SHARE_HISTORY=true
+export HIST_EXPIRE_DUPS_FIRST=true
+export HIST_SAVE_NO_DUPS=true
 
 # Set case-sensitivity for completion, history lookup, etc.
 # zstyle ':prezto:*:*' case-sensitive 'yes'
