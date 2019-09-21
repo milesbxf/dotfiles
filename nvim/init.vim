@@ -3,6 +3,8 @@ call plug#begin('~/.local/share/nvim/plugged')
 "Sensible vim defaults
 Plug 'tpope/vim-sensible'
 
+" Async job control
+Plug 'prabirshrestha/async.vim'
 
 "========= UI =========
 
@@ -64,10 +66,10 @@ Plug 'cwood/ultisnips-terraform-snippets'
 "========= File utilities (linting, autocompletion) =========
 
 "Autocompletion
-Plug 'Valloric/YouCompleteMe', { 'do': './install.py' }
+" Plug 'Valloric/YouCompleteMe', { 'do': './install.py' }
 
 "Asychronous Lint Engine, on the fly linting of files
-Plug 'w0rp/ale'
+" Plug 'w0rp/ale'
 
 "Formats a file using formatter defined for its filetype
 Plug 'sbdchd/neoformat'
@@ -75,6 +77,8 @@ Plug 'sbdchd/neoformat'
 "Fuzzy searching of files using FZF
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
+
+Plug 'yuki-ycino/fzf-preview.vim'
 
 "Better diffing
 Plug 'chrisbra/vim-diff-enhanced'
@@ -93,16 +97,28 @@ Plug 'romainl/flattened'
 Plug 'avakhov/vim-yaml'
 Plug 'hashivim/vim-terraform'
 Plug 'andrewstuart/vim-kubernetes'
-Plug 'fatih/vim-go', { 'tag': 'v1.17' }
+Plug 'fatih/vim-go'
+
+" Plug 'neoclide/coc.nvim', {'tag': '*', 'do': './install.sh'}
+
+Plug 'rodjek/vim-puppet'
+
+Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install'  }
+
+" TEST govim
+" Plug 'file:///Users/milesbryant/src/github.com/myitcv/govim'
 
 "Makes vim indentation PEP8 compatible
 Plug 'Vimjas/vim-python-pep8-indent'
+
+Plug 'heavenshell/vim-pydocstring'
 
 
 "========= SCM/Git =========
 
 "Git plugin
 Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-rhubarb'
 
 "Displays git symbols in the gutter, e.g. +,-,~
 Plug 'mhinz/vim-signify'
@@ -114,7 +130,6 @@ call plug#end()
 
 set termguicolors  " Ensure we're running in 256 true colour mode
 
-set updatetime=50 " Update async processes quicker
 
 " Gruvbox theme config; see https://github.com/morhetz/gruvbox/wiki/Configuration
 let g:gruvbox_italic         = 1
@@ -124,12 +139,16 @@ let g:gruvbox_undercurl      = 1
 let g:gruvbox_contrast_light = 'hard'
 let g:airline_theme          = 'gruvbox'
 
+" let g:airline_section_error = '%{airline#util#wrap(airline#extensions#coc#get_error(),0)}'
+" let g:airline_section_warning = '%{airline#util#wrap(airline#extensions#coc#get_warning(),0)}'
+
 colorscheme gruvbox
 set background=dark
 
 " Git gutter symbols
 let g:signify_vcs_list=['git']
 let g:signify_realtime = 1
+let g:signify_line_highlight = 0
 highlight link SignifySignAdd             DiffAdd
 highlight link SignifySignChange          DiffChange
 highlight link SignifySignDelete          DiffDelete
@@ -139,14 +158,14 @@ highlight link SignifySignDeleteFirstLine SignifySignDelete
 set inccommand=split
 
 "========================== ALE settings ============================
-let g:ale_sign_error                 = '❌'
-let g:ale_sign_warning               = '⚠️'
-let g:ale_sign_info = 'ℹ️'
-let g:airline#extensions#ale#enabled = 1
-let g:ale_lint_delay = 100
-let g:ale_set_highlights = 1
-let g:ale_sign_column_always = 1
-highlight link ALEErrorLine Error
+" let g:ale_sign_error                 = '❌'
+" let g:ale_sign_warning               = '⚠️'
+" let g:ale_sign_info = 'ℹ️'
+" let g:airline#extensions#ale#enabled = 1
+" let g:ale_lint_delay = 100
+" let g:ale_set_highlights = 1
+" let g:ale_sign_column_always = 1
+" highlight link ALEErrorLine Error
 
 
 
@@ -159,13 +178,17 @@ set encoding=utf-8
 set hidden     "if opening a new buffer when the current one has unwritten changes, just "hide" the current one instead of closing it
 set undofile    "Save undo history for files
 
+set modelines=0
+set nomodeline
+
 "========================== Key mapping ============================
 
 
 " leader key
 let mapleader = "\<Space>"
 
-inoremap jj <ESC>  "Hit jj in insert mode to trigger ESC
+" Hit jj in insert mode to trigger ESC
+inoremap jj <ESC>
 
 " Make backspace behaviour sane
 set backspace=eol,start,indent
@@ -191,12 +214,12 @@ vnoremap <tab> %
 "Leader key shortcuts
 
 "show open buffers
-noremap <leader>b :Buffers<cr>
+noremap <leader>b :BuffersPreview<cr>
 
 "search in files with ripgrep
 noremap <leader>s :Find<cr>
 "search filenames with FZF
-noremap <leader>f :Files<cr>
+noremap <leader>f :ProjectFilesPreview<cr>
 
 "Search Git files (git ls-files && git status)
 noremap <leader>ga :GFiles<cr>
@@ -255,14 +278,16 @@ noremap <leader>u :UndotreeToggle<cr>
 noremap <leader>] :TagbarToggle<cr>
 noremap <leader>t :NERDTreeToggle<cr>
 
+autocmd FileType markdown noremap <leader>gp <Plug>MarkdownPreviewToggle<cr>
+
 "Go commands
 
-noremap gt :GoTest<cr>
-noremap gg :GoInfo<cr>
-noremap gft :GoTestFunction<cr>
+autocmd FileType go noremap gt :GoTest<cr>
+autocmd FileType go noremap gft :GoTestFunc<cr>
 
-noremap gb :<C-u>call <SID>build_go_files()<cr>
-noremap <leader>g :GoDeclsDir<cr>
+autocmd FileType go noremap gb :<C-u>call <SID>build_go_files()<cr>
+autocmd FileType go noremap gv :GoDoc<cr>
+autocmd FileType go noremap <leader>g :GoDeclsDir<cr>
 
 nnoremap <C-.> :cnext<cr>
 nnoremap <C-,> :cprevious<cr>
@@ -277,6 +302,8 @@ nnoremap <C-K> <C-W>k
 nnoremap <C-L> <C-W>l
 nnoremap <C-H> <C-W>h
 
+" nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> <C--> <Plug>(pydocstring)
 
 "=================================== UI: General ==============================
 
@@ -287,7 +314,7 @@ set wildmenu   "autocompletion in vim command mode
 set wildmode=longest:full,full
 
 set wrap "wrap text visually, but only insert linebreaks when told to
-set textwidth=79  "wrapping width"
+set textwidth=0  "wrapping width"
 
 set visualbell  "Flash screen instead of beeping when I do something wrong
 set ruler       "Display current line,column & relative position at bottom
@@ -318,6 +345,9 @@ let g:indentLine_char = ''
 " keep current line/cursor centred on screen
 set scrolloff=999
 
+let g:fzf_preview_command = "bat --style=numbers --color=always {-1}"
+let g:fzf_preview_layout = 'belowright split new'
+let g:fzf_preview_filelist_command = 'rg --files --hidden --follow --glob "!.git/*" --glob "!vendor/"'
 
 " ==================================== Tabs ==================================
 
@@ -380,11 +410,12 @@ let g:UltiSnipsJumpBackwardTrigger="<c-k>"
 
 autocmd BufWritePre *.py :%s/\s\+$//e  "remove trailing whitespace
 " Python settings
-au FileType py set autoindent
-au FileType py set smartindent
-au FileType py set textwidth=79  " PEP-8
+au FileType python set autoindent
+au FileType python set smartindent
+au FileType python set tabstop=4 shiftwidth=4 expandtab
+au FileType python set textwidth=79  " PEP-8
 
-let g:neoformat_enabled_python = ['autopep8']
+let g:neoformat_enabled_python = ['black']
 
 noremap <leader>r :Neoformat<cr>
 
@@ -404,37 +435,57 @@ autocmd FileType terraform setlocal commentstring=#%s
 
 " =============================== Golang files ===============================
 
-" can I has all the syntax highlights plz
-let g:go_highlight_types = 1
-let g:go_highlight_fields = 1
-let g:go_highlight_functions = 1
-let g:go_highlight_function_calls = 1
-let g:go_highlight_operators = 1
-let g:go_highlight_extra_types = 1
-let g:go_highlight_build_constraints = 1
-let g:go_highlight_generate_tags = 1
+ " can I has all the syntax highlights plz
+ let g:go_highlight_types = 1
+ let g:go_highlight_fields = 1
+ let g:go_highlight_functions = 1
+ let g:go_highlight_function_calls = 1
+ let g:go_highlight_operators = 1
+ let g:go_highlight_extra_types = 1
+ let g:go_highlight_build_constraints = 1
+ let g:go_highlight_generate_tags = 1
 
-let g:go_fmt_command = "goimports"
+ let g:go_fmt_command = "goimports"
+ " let g:go_def_mode='gopls'
 
-let g:go_auto_type_info = 1
-let g:go_auto_sameids = 1
+ let g:go_term_enabled = 1
 
-" update info a bit quicker (vim gets pretty sluggish for values lower than
-" this)
-let g:go_updatetime = 500
+ let g:go_auto_type_info = 1
+ let g:go_auto_sameids = 1
 
-"write file when calling go build
-set autowrite
+ " update info a bit quicker (vim gets pretty sluggish for values lower than
+ " this)
+ let g:go_updatetime = 2000
 
-" open everything in quickfix window
-let g:go_list_type = "quickfix"
 
-" run :GoBuild or :GoTestCompile based on the go file
-function! s:build_go_files()
-  let l:file = expand('%')
-  if l:file =~# '^\f\+_test\.go$'
-    call go#test#Test(0, 1)
-  elseif l:file =~# '^\f\+\.go$'
-    call go#cmd#Build(0)
-  endif
-endfunction
+ " open everything in quickfix window
+ let g:go_list_type = "quickfix"
+
+ " run :GoBuild or :GoTestCompile based on the go file
+ function! s:build_go_files()
+   let l:file = expand('%')
+   if l:file =~# '^\f\+_test\.go$'
+     call go#test#Test(0, 1)
+   elseif l:file =~# '^\f\+\.go$'
+     call go#cmd#Build(0)
+   endif
+ endfunction
+
+"
+" ============================= Coc =========================================
+" " " Show all diagnostics
+" nnoremap <silent> <leader>ca  :<C-u>CocList diagnostics<cr>
+" " Manage extensions
+" nnoremap <silent> <leader>ce  :<C-u>CocList extensions<cr>
+" " Show commands
+" nnoremap <silent> <leader>cc  :<C-u>CocList commands<cr>
+" " Find symbol of current document
+" nnoremap <silent> <leader>co  :<C-u>CocList outline<cr>
+" " Search workspace symbols
+" nnoremap <silent> <leader>cs  :<C-u>CocList -I symbols<cr>
+" " Do default action for next item.
+" nnoremap <silent> <leader>cj  :<C-u>CocNext<CR>
+" " Do default action for previous item.
+" nnoremap <silent> <leader>ck  :<C-u>CocPrev<CR>
+" " Resume latest coc list
+" nnoremap <silent> <leader>cp  :<C-u>CocListResume<CR>
