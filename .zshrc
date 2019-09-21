@@ -5,7 +5,7 @@ autoload -Uz compinit
 compinit
 
 # Add scripts to paths
-export PATH="${HOME}/.dotfiles/scripts:${PATH}"
+export PATH="${HOME}/.dotfiles/scripts:${PATH}:/usr/local/kubebuilder/bin"
 
 # Load NERD font variables (https://github.com/ryanoasis/nerd-fonts)
 source ~/.dotfiles/nerd/i_all.sh
@@ -58,6 +58,8 @@ fi
 
 #GOPATH should be home dir
 export GOPATH=~
+# export GOFLAGS="-mod=vendor" 
+# export GO111MODULE=on
 
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 
@@ -71,3 +73,7 @@ if [ -f '/Users/milesbryant/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/mil
 
 # The next line enables shell command completion for gcloud.
 if [ -f '/Users/milesbryant/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/milesbryant/google-cloud-sdk/completion.zsh.inc'; fi
+
+
+# added by travis gem
+[ -f /Users/milesbryant/.travis/travis.sh ] && source /Users/milesbryant/.travis/travis.sh

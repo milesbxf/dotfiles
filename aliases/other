@@ -19,3 +19,16 @@ github_clone() {
 }
 
 alias ghc=github_clone
+
+fzf_preview() {
+    fzf --preview '[[ $(file --mime {}) =~ binary ]] &&
+                 echo {} is a binary file ||
+                 (bat --style=numbers --color=always {} ||
+                  highlight -O ansi -l {} ||
+                  coderay {} ||
+                  rougify {} ||
+                  cat {}) 2> /dev/null | head -500'
+}
+alias f=fzf_preview
+
+alias kube-nodeports="k get services '-o=custom-columns=NAME:.metadata.name,NODEPORT:.spec.ports[0].nodePort' --no-headers | grep -v '<none>' | sort -k 2n"

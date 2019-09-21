@@ -1,11 +1,11 @@
 [user]
 	name = Miles Bryant
 	email = milesbryant@monzo.com
-	signingkey = 43A8B34FE3CD9642
+	signingkey = F216EBE507018502
 [core]
 	editor = nvim
 	autocrlf = input
-	excludesfile = /home/miles/.gitignore-global
+	excludesfile = /Users/milesbryant/.gitignore-global
 [commit]
 	template = ~/.gitmessage
 	gpgsign = true
@@ -32,7 +32,20 @@
     insteadOf = mz:
 
 [merge]
-	tool = kdiff3
+	tool = vimdiff
+
+[mergetool]
+  prompt = true
+
+[mergetool "vimdiff"]
+    cmd = nvim -f -c \"Gdiff\" \"$MERGED\"
+
+[difftool]
+  prompt = false
+
+[diff]
+  tool = vimdiff
+
 [url "ssh://git@github.com/"]
 	insteadOf = https://github.com/
 [filter "lfs"]
@@ -42,3 +55,5 @@
 	required = true
 [gpg]
 	program = gpg2
+[remote "origin"]
+	prune = true

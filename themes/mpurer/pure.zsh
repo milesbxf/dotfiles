@@ -176,6 +176,19 @@ prompt_pure_preprompt_render() {
         CURRENT_BG=${PROMPT_USERMACHINE_BG}
     fi
 
+	# Monzo trias profile
+    if [[ ! -z "${TRIAS_PRETTY_NAME}" ]]; then
+        if [[ ${TRIAS_PRETTY_NAME} =~ "^prod.+" ]]; then
+            PROMPT_TRIAS_PRETTY_BG=${PROMPT_TRIAS_PRETTY_BG:-124}
+            PROMPT_TRIAS_PRETTY_FG=${PROMPT_TRIAS_PRETTY_FG:-246}
+        else 
+            PROMPT_TRIAS_PRETTY_BG=${PROMPT_TRIAS_PRETTY_BG:-66}
+            PROMPT_TRIAS_PRETTY_FG=${PROMPT_TRIAS_PRETTY_FG:-239}
+        fi
+        preprompt_parts+=($(prompt_segment ${PROMPT_TRIAS_PRETTY_BG} ${PROMPT_TRIAS_PRETTY_FG})'%B ${TRIAS_PRETTY_NAME}%f')
+        CURRENT_BG=${PROMPT_TRIAS_PRETTY_BG}
+    fi
+
     PROMPT_EXTIME_BG=${PROMPT_EXTIME_BG:-yellow}
     PROMPT_EXTIME_FG=${PROMPT_EXTIME_FG:-red}
 	# Execution time.
