@@ -56,7 +56,6 @@ nmap ga <Plug>(EasyAlign)
 "========= Snippets =========
 
 " Use <TAB> for all insert completion
-Plug 'ervandew/supertab'
 
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
@@ -97,9 +96,12 @@ Plug 'romainl/flattened'
 Plug 'avakhov/vim-yaml'
 Plug 'hashivim/vim-terraform'
 Plug 'andrewstuart/vim-kubernetes'
-Plug 'fatih/vim-go'
+" Plug 'fatih/vim-go'
 
-" Plug 'neoclide/coc.nvim', {'tag': '*', 'do': './install.sh'}
+Plug 'Shougo/neco-vim'
+Plug 'neoclide/coc-neco'
+
+Plug 'neoclide/coc.nvim', {'do': 'yarn install --frozen-lockfile'}
 
 Plug 'rodjek/vim-puppet'
 
@@ -215,6 +217,9 @@ vnoremap <tab> %
 
 "show open buffers
 noremap <leader>b :BuffersPreview<cr>
+
+"show diagnostics
+noremap <leader>d :CocList diagnostics<cr>
 
 "search in files with ripgrep
 noremap <leader>s :Find<cr>
@@ -400,7 +405,6 @@ let &colorcolumn=join(range(80,999),",") "visual margin for line width
 
 let g:ycm_key_list_select_completion = ['<C-n>', '<Down>']
 let g:ycm_key_list_previous_completion = ['<C-p>', '<Up>']
-let g:SuperTabDefaultCompletionType = '<C-n>'
 
 let g:UltiSnipsExpandTrigger="<c-j>"
 let g:UltiSnipsJumpForwardTrigger="<c-j>"
@@ -415,7 +419,7 @@ au FileType python set smartindent
 au FileType python set tabstop=4 shiftwidth=4 expandtab
 au FileType python set textwidth=79  " PEP-8
 
-let g:neoformat_enabled_python = ['black']
+let g:neoformat_enabled_python = ['black', 'isort']
 
 noremap <leader>r :Neoformat<cr>
 
@@ -473,19 +477,35 @@ autocmd FileType terraform setlocal commentstring=#%s
 
 "
 " ============================= Coc =========================================
-" " " Show all diagnostics
-" nnoremap <silent> <leader>ca  :<C-u>CocList diagnostics<cr>
-" " Manage extensions
-" nnoremap <silent> <leader>ce  :<C-u>CocList extensions<cr>
-" " Show commands
-" nnoremap <silent> <leader>cc  :<C-u>CocList commands<cr>
-" " Find symbol of current document
-" nnoremap <silent> <leader>co  :<C-u>CocList outline<cr>
-" " Search workspace symbols
-" nnoremap <silent> <leader>cs  :<C-u>CocList -I symbols<cr>
-" " Do default action for next item.
-" nnoremap <silent> <leader>cj  :<C-u>CocNext<CR>
-" " Do default action for previous item.
-" nnoremap <silent> <leader>ck  :<C-u>CocPrev<CR>
-" " Resume latest coc list
-" nnoremap <silent> <leader>cp  :<C-u>CocListResume<CR>
+let g:airline#extensions#coc#enabled = 1
+
+" " Show all diagnostics
+nnoremap <silent> <leader>ca  :<C-u>CocList diagnostics<cr>
+" Manage extensions
+nnoremap <silent> <leader>ce  :<C-u>CocList extensions<cr>
+" Show commands
+nnoremap <silent> <leader>cc  :<C-u>CocList commands<cr>
+" Find symbol of current document
+nnoremap <silent> <leader>co  :<C-u>CocList outline<cr>
+" Search workspace symbols
+nnoremap <silent> <leader>cs  :<C-u>CocList -I symbols<cr>
+" Do default action for next item.
+nnoremap <silent> <leader>cj  :<C-u>CocNext<CR>
+" Do default action for previous item.
+nnoremap <silent> <leader>ck  :<C-u>CocPrev<CR>
+" Resume latest coc list
+nnoremap <silent> <leader>cp  :<C-u>CocListResume<CR>
+
+" use <tab> for trigger completion and navigate to the next complete item
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~ '\s'
+endfunction
+
+inoremap <silent><expr> <Tab>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<Tab>" :
+      \ coc#refresh()
+
+inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm() : 
+                                           \"\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
