@@ -19,7 +19,7 @@ while read line; do
         if [[ ${#this_command} -le 80 ]]; then
             prev_command=$this_command
         else
-            prev_command="${this_command:0:77}..."
+            prev_command="${this_command:0:150}..."
         fi
     fi
 done < ${1:-/dev/stdin}
