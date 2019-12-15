@@ -4,6 +4,7 @@
 autoload -Uz compinit
 compinit
 
+
 # Add scripts to paths
 export PATH="${HOME}/.dotfiles/scripts:${PATH}:/usr/local/kubebuilder/bin"
 
@@ -73,6 +74,18 @@ if [ -f '/Users/milesbryant/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/mil
 
 # The next line enables shell command completion for gcloud.
 if [ -f '/Users/milesbryant/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/milesbryant/google-cloud-sdk/completion.zsh.inc'; fi
+
+function zle-keymap-select zle-line-init zle-line-finish
+{
+  case $KEYMAP in
+      vicmd)      print -n '\033[1 q';; # block cursor
+      viins|main) print -n '\033[5 q';; # line cursor
+  esac
+}
+
+zle -N zle-line-init
+zle -N zle-line-finish
+zle -N zle-keymap-select
 
 
 # added by travis gem
