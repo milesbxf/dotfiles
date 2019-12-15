@@ -1,9 +1,5 @@
 #!/usr/bin/env zsh
 
-# Load ZSH tab completion
-autoload -Uz compinit
-compinit
-
 
 # Add scripts to paths
 export PATH="${HOME}/.dotfiles/scripts:${PATH}:/usr/local/kubebuilder/bin"
