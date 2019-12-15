@@ -1,9 +1,5 @@
 #!/usr/bin/env zsh
 
-# Load ZSH tab completion
-autoload -Uz compinit
-compinit
-
 # Neovim all the way (https://github.com/neovim/neovim)
 export EDITOR='nvim'
 
