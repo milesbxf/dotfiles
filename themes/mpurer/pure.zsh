@@ -523,7 +523,9 @@ prompt_pure_async_callback() {
 	[[ ${prompt_pure_async_render_requested:-$do_render} = 1 ]] && prompt_pure_preprompt_render
 	unset prompt_pure_async_render_requested
 }
+
 prompt_pure_setup() {
+
 	setopt localoptions noshwordsplit
 
 
@@ -552,6 +554,9 @@ prompt_pure_setup() {
 	add-zsh-hook precmd prompt_pure_precmd
 	add-zsh-hook preexec prompt_pure_preexec
 
+    zstyle ':prezto:module:prompt' managed 'yes'
+
+
 	local ssh_connection=$SSH_CONNECTION
 	local username
 	if [[ -z $ssh_connection ]] && (( $+commands[who] )); then
@@ -571,6 +576,7 @@ prompt_pure_setup() {
 	typeset -gA prompt_pure_state=(
 		username "$username"
 	)
+
     PROMPT_SYMBOLS=""
 
 	# if a virtualenv is activated, display it in grey

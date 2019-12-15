@@ -3,11 +3,15 @@
 #
 # General
 #
+# Add directory to ZSH functions list
+fpath=($fpath ~/.dotfiles/fpath)
+
 
 export KEYTIMEOUT=1
 
 # https://github.com/ryanoasis/nerd-fonts
 export SEGMENT_SEPARATOR="${i_ple_pixelated_squares_big}"
+export SEGMENT_SEPARATOR="${i_ple_right_half_circle_thick}"
 
 
 # Save ZSH history to a ZSH-specific file
@@ -48,19 +52,14 @@ zstyle ':prezto:*:*' color 'yes'
 # Set the Prezto modules to load (browse modules).
 # The order matters.
 zstyle ':prezto:load' pmodule \
-  'docker' \
   'environment' \
-  'terminal' \
   'editor' \
-  'history' \
-  'git' \
-  'directory' \
-  'spectrum' \
-  'utility' \
+  'autosuggestions' \
   'completion' \
-  'fasd' \
-  'tmux' \
+  'directory' \
+  'history' \
   'syntax-highlighting' \
+  'utility' \
   'prompt' \
 
 # Set the key mapping style to 'emacs' or 'vi'.
@@ -72,23 +71,14 @@ zstyle ':prezto:module:editor' dot-expansion 'no'
 # Allow the zsh prompt context to be shown.
 zstyle ':prezto:module:editor' ps-context 'yes'
 
-# https://github.com/ryanoasis/nerd-fonts
+# Start setting up the prompt
+autoload -Uz promptinit
+promptinit
+prompt mpurer
+zstyle ':prezto:module:prompt' mpurer
 
 # Set key mode for INSERT mode
-zstyle ':prezto:module:editor:info:keymap:primary' format "%F{167}${i_fa_chevron_right}%F{108}${i_fa_chevron_right}%F{208}${i_fa_chevron_right}"
-
+zstyle ':prezto:module:editor:info:keymap:primary' format $'%{\e[5 q%}'"%F{167}${i_fa_chevron_right}%F{108}${i_fa_chevron_right}%F{208}${i_fa_chevron_right}"
 # Set key mode for NORMAL mode
-zstyle ':prezto:module:editor:info:keymap:alternate' format "%F{142}${i_fa_chevron_left}%F{214}${i_fa_chevron_left}%F{109}${i_fa_chevron_left}"
+zstyle ':prezto:module:editor:info:keymap:alternate' format $'%{\e[1 q'"%F{142}${i_fa_chevron_left}%F{214}${i_fa_chevron_left}%F{109}${i_fa_chevron_left}"
 
-# Ignore submodules when they are 'dirty', 'untracked', 'all', or 'none'.
-# zstyle ':prezto:module:git:status:ignore' submodules 'all'
-zstyle ':prezto:module:git:alias' skip 'yes'
-
-# Auto start a session when Zsh is launched in a local terminal.
-zstyle ':prezto:module:tmux:auto-start' local 'yes'
-
-# Auto start a session when Zsh is launched in a SSH connection.
-# zstyle ':prezto:module:tmux:auto-start' remote 'yes'
-
-# Integrate with iTerm2.
-zstyle ':prezto:module:tmux:iterm' integrate 'yes'
