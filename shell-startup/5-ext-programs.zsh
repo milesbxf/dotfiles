@@ -63,3 +63,4 @@ export GOPATH=~
 # export GOFLAGS="-mod=vendor" 
 # export GO111MODULE=on
 
+eval "$(jump shell)"

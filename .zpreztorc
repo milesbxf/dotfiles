@@ -54,7 +54,6 @@ zstyle ':prezto:*:*' color 'yes'
 zstyle ':prezto:load' pmodule \
   'environment' \
   'editor' \
-  'autosuggestions' \
   'completion' \
   'directory' \
   'history' \
