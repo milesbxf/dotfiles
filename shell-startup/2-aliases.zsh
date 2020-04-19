@@ -1,6 +1,5 @@
 #!/usr/bin/env zsh
 
-
 # Add scripts to paths
 export PATH="${HOME}/.dotfiles/scripts:${PATH}:/usr/local/kubebuilder/bin"
 

@@ -10,4 +10,3 @@ source ~/.dotfiles/zsh/key-bindings.zsh
 # escape sequences properly
 bindkey "^[[1~" beginning-of-line
 bindkey "^[[4~" end-of-line
-
