@@ -221,6 +221,9 @@ noremap <leader>b :BuffersPreview<cr>
 "show diagnostics
 noremap <leader>d :CocList diagnostics<cr>
 
+noremap <C-e> :let @c="<C-r><C-r>c"
+noremap <leader>e :!zsh -c 'tmux send-keys -t {right-of} C-c C-c "<C-r><C-r>c" Enter'<cr><cr>
+
 "search in files with ripgrep
 noremap <leader>s :Find<cr>
 "search filenames with FZF
