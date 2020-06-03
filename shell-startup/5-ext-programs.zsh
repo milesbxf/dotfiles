@@ -58,6 +58,25 @@ if [ $commands[gcloud] ]; then
   }
 fi
 
+
+# Check if 'jira' is a command in $PATH
+if [ $commands[jira] ]; then
+
+  # Placeholder 'jira' shell function:
+  # Will only be executed on the first call to 'jira'
+  jira() {
+
+    # Remove this function, subsequent calls will execute 'kubectl' directly
+    unfunction "$0"
+
+    eval "$(jira --completion-script-zsh)"
+
+    # Execute binary
+    $0 "$@"
+  }
+fi
+
+
 #GOPATH should be home dir
 export GOPATH=~
 # export GOFLAGS="-mod=vendor" 
