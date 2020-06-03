@@ -32,6 +32,12 @@ Plug 'junegunn/rainbow_parentheses.vim'
 " Highlight yank
 Plug 'machakann/vim-highlightedyank'
 
+Plug 'ncm2/float-preview.nvim'
+
+Plug 'junegunn/goyo.vim'
+Plug 'junegunn/limelight.vim'
+
+
 "========= Editing/motions =========
 
 "Automatically closes HTML/XML tags
@@ -96,12 +102,13 @@ Plug 'romainl/flattened'
 Plug 'avakhov/vim-yaml'
 Plug 'hashivim/vim-terraform'
 Plug 'andrewstuart/vim-kubernetes'
-" Plug 'fatih/vim-go'
+Plug 'fatih/vim-go', {  'tag': 'v1.22', 'do': ':GoUpdateBinaries' }
 
 Plug 'Shougo/neco-vim'
-Plug 'neoclide/coc-neco'
+Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 
-Plug 'neoclide/coc.nvim', {'do': 'yarn install --frozen-lockfile'}
+
+Plug 'wellle/tmux-complete.vim'
 
 Plug 'rodjek/vim-puppet'
 
@@ -195,17 +202,6 @@ inoremap jj <ESC>
 " Make backspace behaviour sane
 set backspace=eol,start,indent
 
-" Stop being so lazy - remove arrow key config
-noremap <Up>     <nop>
-noremap <Down>   <nop>
-noremap <Left>   <nop>
-noremap <Right>  <nop>
-
-inoremap <Up>    <nop>
-inoremap <Down>  <nop>
-inoremap <Left>  <nop>
-inoremap <Right> <nop>
-
 "in Visual mode, hitting . applies the same action to all lines
 vnoremap . :norm.<CR>
 
@@ -216,10 +212,7 @@ vnoremap <tab> %
 "Leader key shortcuts
 
 "show open buffers
-noremap <leader>b :BuffersPreview<cr>
-
-"show diagnostics
-noremap <leader>d :CocList diagnostics<cr>
+noremap <leader>b :FzfPreviewBuffers<cr>
 
 noremap <C-e> :let @c="<C-r><C-r>c"
 noremap <leader>e :!zsh -c 'tmux send-keys -t {right-of} C-c C-c "<C-r><C-r>c" Enter'<cr><cr>
@@ -227,22 +220,25 @@ noremap <leader>e :!zsh -c 'tmux send-keys -t {right-of} C-c C-c "<C-r><C-r>c" E
 "search in files with ripgrep
 noremap <leader>s :Find<cr>
 "search filenames with FZF
-noremap <leader>f :ProjectFilesPreview<cr>
+noremap <leader>f :FzfPreviewMrwFiles<cr>
 
-"Search Git files (git ls-files && git status)
-noremap <leader>ga :GFiles<cr>
-noremap <leader>gs :GFiles?<cr>
+nmap <Leader>f [fzf-p]
+xmap <Leader>f [fzf-p]
 
-"Search lines in current buffer & in all buffers
-noremap <leader>l :BLines<cr>
-noremap <leader>k :Lines<cr>
-
-"Search tags in current buffer & in all buffers
-noremap <leader>5 :BTags<cr>
-noremap <leader>6 :Tags<cr>
-
-"Search marks
-noremap <leader>m :Marks<cr>
+nnoremap <silent> [fzf-p]p     :<C-u>FzfPreviewFromResources project_mru git<CR>
+nnoremap <silent> [fzf-p]gs    :<C-u>FzfPreviewGitStatus<CR>
+nnoremap <silent> [fzf-p]b     :<C-u>FzfPreviewBuffers<CR>
+nnoremap <silent> [fzf-p]B     :<C-u>FzfPreviewAllBuffers<CR>
+nnoremap <silent> [fzf-p]o     :<C-u>FzfPreviewFromResources buffer project_mru<CR>
+nnoremap <silent> [fzf-p]<C-o> :<C-u>FzfPreviewJumps<CR>
+nnoremap <silent> [fzf-p]g;    :<C-u>FzfPreviewChanges<CR>
+nnoremap <silent> [fzf-p]/     :<C-u>FzfPreviewLines -add-fzf-arg=--no-sort -add-fzf-arg=--query="'"<CR>
+nnoremap <silent> [fzf-p]*     :<C-u>FzfPreviewLines -add-fzf-arg=--no-sort -add-fzf-arg=--query="'<C-r>=expand('<cword>')<CR>"<CR>
+nnoremap          [fzf-p]gr    :<C-u>FzfPreviewProjectGrep<Space>
+xnoremap          [fzf-p]gr    "sy:FzfPreviewProjectGrep<Space>-F<Space>"<C-r>=substitute(substitute(@s, '\n', '', 'g'), '/', '\\/', 'g')<CR>"
+nnoremap <silent> [fzf-p]t     :<C-u>FzfPreviewBufferTags<CR>
+nnoremap <silent> [fzf-p]q     :<C-u>FzfPreviewQuickFix<CR>
+nnoremap <silent> [fzf-p]l     :<C-u>FzfPreviewLocationList<CR>
 
 "Search file history
 noremap <leader>hf :History<cr>
@@ -353,9 +349,18 @@ let g:indentLine_char = ''
 " keep current line/cursor centred on screen
 set scrolloff=999
 
-let g:fzf_preview_command = "bat --style=numbers --color=always {-1}"
-let g:fzf_preview_layout = 'belowright split new'
-let g:fzf_preview_filelist_command = 'rg --files --hidden --follow --glob "!.git/*" --glob "!vendor/"'
+" let g:fzf_preview_command = "bat --style=numbers --color=always {-1}"
+" let g:fzf_preview_layout = 'belowright split new'
+" let g:fzf_preview_filelist_command = 'rg --files --hidden --follow --glob "!.git/*" --glob "!vendor/"'
+
+" ==================================== Goyo/limelight ==================================
+"
+
+au FileType markdown Goyo
+
+autocmd! User GoyoEnter Limelight
+autocmd! User GoyoLeave Limelight!
+
 
 " ==================================== Tabs ==================================
 
@@ -441,6 +446,13 @@ autocmd FileType terraform setlocal commentstring=#%s
 
 
 " =============================== Golang files ===============================
+"
+au FileType go set noexpandtab
+au FileType go set shiftwidth=4
+au FileType go set softtabstop=4
+au FileType go set tabstop=4
+
+au FileType go set autowrite
 
  " can I has all the syntax highlights plz
  let g:go_highlight_types = 1
@@ -478,37 +490,13 @@ autocmd FileType terraform setlocal commentstring=#%s
    endif
  endfunction
 
-"
-" ============================= Coc =========================================
-let g:airline#extensions#coc#enabled = 1
+let g:go_gopls_use_placeholders = 1
 
-" " Show all diagnostics
-nnoremap <silent> <leader>ca  :<C-u>CocList diagnostics<cr>
-" Manage extensions
-nnoremap <silent> <leader>ce  :<C-u>CocList extensions<cr>
-" Show commands
-nnoremap <silent> <leader>cc  :<C-u>CocList commands<cr>
-" Find symbol of current document
-nnoremap <silent> <leader>co  :<C-u>CocList outline<cr>
-" Search workspace symbols
-nnoremap <silent> <leader>cs  :<C-u>CocList -I symbols<cr>
-" Do default action for next item.
-nnoremap <silent> <leader>cj  :<C-u>CocNext<CR>
-" Do default action for previous item.
-nnoremap <silent> <leader>ck  :<C-u>CocPrev<CR>
-" Resume latest coc list
-nnoremap <silent> <leader>cp  :<C-u>CocListResume<CR>
 
-" use <tab> for trigger completion and navigate to the next complete item
-function! s:check_back_space() abort
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~ '\s'
-endfunction
+" ============================ Deoplete completion ============================
 
-inoremap <silent><expr> <Tab>
-      \ pumvisible() ? "\<C-n>" :
-      \ <SID>check_back_space() ? "\<Tab>" :
-      \ coc#refresh()
+let g:deoplete#enable_at_startup = 1
+call deoplete#custom#option({ 'omni_patterns': { 'go': '[^. *\t]\.\w*' }, 'camel_case': v:true })
+call deoplete#enable_logging("DEBUG", $HOME."/.deoplete.log")
 
-inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm() : 
-                                           \"\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+
