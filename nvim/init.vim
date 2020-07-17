@@ -89,7 +89,7 @@ Plug 'sbdchd/neoformat'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 
-Plug 'yuki-ycino/fzf-preview.vim'
+Plug 'yuki-ycino/fzf-preview.vim', { 'branch': 'release' }
 
 "Better diffing
 Plug 'chrisbra/vim-diff-enhanced'
@@ -356,9 +356,6 @@ let g:indentLine_char = ''
 " keep current line/cursor centred on screen
 set scrolloff=999
 
-" let g:fzf_preview_command = "bat --style=numbers --color=always {-1}"
-" let g:fzf_preview_layout = 'belowright split new'
-" let g:fzf_preview_filelist_command = 'rg --files --hidden --follow --glob "!.git/*" --glob "!vendor/"'
 
 " ==================================== Goyo/limelight ==================================
 "
