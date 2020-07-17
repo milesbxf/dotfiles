@@ -9,6 +9,7 @@ alias md="mkdir -p"
 # Laziness yo
 alias v="nvim"
 alias vi="nvim"
+alias vw="nvim -c VimwikiIndex"
 
 github_clone() {
     [[ -z $1 ]] && echo "Error: ghc requires one argument, e.g. foo/bar" && exit 1

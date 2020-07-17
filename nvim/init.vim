@@ -38,6 +38,12 @@ Plug 'junegunn/goyo.vim'
 Plug 'junegunn/limelight.vim'
 
 
+Plug 'vimwiki/vimwiki'
+Plug 'tbabej/taskwiki'
+Plug 'blindFS/vim-taskwarrior'
+Plug 'powerman/vim-plugin-AnsiEsc'
+
+
 "========= Editing/motions =========
 
 "Automatically closes HTML/XML tags
@@ -122,6 +128,7 @@ Plug 'Vimjas/vim-python-pep8-indent'
 
 Plug 'heavenshell/vim-pydocstring'
 
+Plug 'LnL7/vim-nix'
 
 "========= SCM/Git =========
 
@@ -500,3 +507,4 @@ call deoplete#custom#option({ 'omni_patterns': { 'go': '[^. *\t]\.\w*' }, 'camel
 call deoplete#enable_logging("DEBUG", $HOME."/.deoplete.log")
 
 
+g:vimwiki_auto_header = 1
