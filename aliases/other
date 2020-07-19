@@ -10,6 +10,9 @@ alias md="mkdir -p"
 alias v="nvim"
 alias vi="nvim"
 alias vw="nvim -c VimwikiIndex"
+alias t="task"
+alias ta="task add"
+alias tah="task add project:home"
 
 github_clone() {
     [[ -z $1 ]] && echo "Error: ghc requires one argument, e.g. foo/bar" && exit 1
