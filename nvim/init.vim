@@ -42,6 +42,7 @@ Plug 'vimwiki/vimwiki'
 Plug 'tbabej/taskwiki'
 Plug 'blindFS/vim-taskwarrior'
 Plug 'powerman/vim-plugin-AnsiEsc'
+Plug 'mattn/calendar-vim'
 
 
 "========= Editing/motions =========
