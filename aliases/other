@@ -36,3 +36,8 @@ fzf_preview() {
 alias f=fzf_preview
 
 alias kube-nodeports="k get services '-o=custom-columns=NAME:.metadata.name,NODEPORT:.spec.ports[0].nodePort' --no-headers | grep -v '<none>' | sort -k 2n"
+
+# Query cht.sh cheatsheet for unix commands
+function cht() {
+  curl cht.sh/$1
+}
